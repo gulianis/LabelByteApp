@@ -10,7 +10,6 @@ import UIKit
 
 let BoundingBoxButton: UIButton = {
     let Button = UIButton()
-    //Button.setTitle("X", for: .normal)
     Button.backgroundColor = .lightGray
     Button.layer.cornerRadius = 5
     Button.layer.borderColor = UIColor.darkGray.cgColor
@@ -18,7 +17,6 @@ let BoundingBoxButton: UIButton = {
     Button.translatesAutoresizingMaskIntoConstraints = false
     let renderer = UIGraphicsImageRenderer(size: CGSize(width: 50, height: 50))
     let img = renderer.image { ctx in
-        //ctx.cgContext.setFillColor(UIColor.green.cgColor)
         ctx.cgContext.setStrokeColor(UIColor.black.cgColor)
         ctx.cgContext.setLineWidth(3)
 
@@ -39,7 +37,6 @@ let PointButton: UIButton = {
     Button.translatesAutoresizingMaskIntoConstraints = false
     let renderer = UIGraphicsImageRenderer(size: CGSize(width: 50, height: 50))
     let img = renderer.image { ctx in
-        //ctx.cgContext.setFillColor(UIColor.green.cgColor)
         ctx.cgContext.setStrokeColor(UIColor.black.cgColor)
         ctx.cgContext.setLineWidth(1)
 

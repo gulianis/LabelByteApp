@@ -152,13 +152,6 @@
 			path = API;
 			sourceTree = "<group>";
 		};
-		8966269B24E3C6270027240F /* Image */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Image;
-			sourceTree = "<group>";
-		};
 		89A32D502430320400892752 = {
 			isa = PBXGroup;
 			children = (
@@ -210,7 +203,6 @@
 				8994498D24AB4750003D5120 /* PopUpViewController.swift */,
 				89645B1124E3DDC2002743D2 /* ImageViewController.swift */,
 				8966269C24E3C6D20027240F /* BoundingBoxFunctions.swift */,
-				8966269B24E3C6270027240F /* Image */,
 				89D1FF72249DE4E8009C2F8B /* LoginViewController.swift */,
 				89CD75F924DA478B0003CE4E /* DataTableViewController.swift */,
 				89645B0F24E3DD56002743D2 /* FileTableViewController.swift */,
@@ -372,7 +364,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 89A32D542430320400892752 /* Build configuration list for PBXProject "try1" */;
+			buildConfigurationList = 89A32D542430320400892752 /* Build configuration list for PBXProject "Fabel" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -640,6 +632,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D5LZV3HJW2;
 				INFOPLIST_FILE = try1/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -658,6 +651,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D5LZV3HJW2;
 				INFOPLIST_FILE = try1/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -802,7 +796,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		89A32D542430320400892752 /* Build configuration list for PBXProject "try1" */ = {
+		89A32D542430320400892752 /* Build configuration list for PBXProject "Fabel" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				89A32D6B2430320800892752 /* Debug */,

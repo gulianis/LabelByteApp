@@ -8,66 +8,10 @@
 import Foundation
 import UIKit
 
-/*
-class PopUpView: UIView {
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        ViewItems()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        ViewItems()
-    }
-        
-    let label: UILabel = {
-        let label = UILabel()
-        //label.frame = CGRect(x: 40, y: 100, width: 280, height: 600)
-        label.numberOfLines = 0
-        
-        var fullString = "\n\n"
-        
-        let title1 = "  ToolBox Contains (Left to Right):  "
-        let bullet1 = ["  Bounding Box Label  ", "  Point Label  ", "  Label Color  ", "  Selected Label Color  ", "  Delete Label  "]
-        
-        let title2 = "  Operations:  "
-        let bullet2 = ["  Drag finger to Scroll  ", "  Tap Screen to Place Label  "]
-        
-        let title3 = "  How to Select:  "
-        let bullet3 = ["  Tap on Label or Inside Label  ", "  (Selection Box) - Hold Down  " , "(next)  Finger and Drag around Label  "]
-        
-        let title4 = "  Selected Operations  "
-        let bullet4 = ["  Use Pinch Gesture to Shrink Box  ", "  Use Expand Gesture to Grow Box  ", "  Hold and Drag to Move Box  ", "  Tap Inside to Delete Box  ", "  Tap Outside to Deselect Box  "]
-        
-        fullString += addTitleAndBulletPoints(title1, bullet1)
-        fullString += addTitleAndBulletPoints(title2, bullet2)
-        fullString += addTitleAndBulletPoints(title3, bullet3)
-        fullString += addTitleAndBulletPoints(title4, bullet4)
-        
-        label.text = fullString
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .lightGray
-        label.layer.masksToBounds = true
-        label.layer.cornerRadius = 8.0
-        return label
-    }()
-    
-    func ViewItems() {
-        self.addSubview(label)
-        setupLayout()
-    }
-    
-    private func setupLayout() {
-        label.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        label.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        label.heightAnchor.constraint(equalToConstant: 400).isActive = true
-        
-    }
-}
 
 func addTitleAndBulletPoints(_ title: String, _ bulletString: [String]) -> String {
+    // formats title and string list to a list with a title
+    // and bulleted strings
     var labelString = "  " + title + "\n"
     
     for string1: String in bulletString {
@@ -75,6 +19,7 @@ func addTitleAndBulletPoints(_ title: String, _ bulletString: [String]) -> Strin
         let start = string1.index(string1.startIndex, offsetBy: 0)
         let end = string1.index(string1.startIndex, offsetBy: 5)
         var formattedString: String = ""
+        // If (next) in string put it on next line without bullet
         if string1[start...end] == "(next)" {
             let newStart = string1.index(string1.startIndex, offsetBy: 6)
             let newEnd = string1.index(string1.endIndex, offsetBy: -1)
@@ -88,82 +33,20 @@ func addTitleAndBulletPoints(_ title: String, _ bulletString: [String]) -> Strin
     return labelString
 }
 
-let instructionsLabel: UILabel = {
-    let label = UILabel()
-    //label.frame = CGRect(x: 40, y: 100, width: 280, height: 600)
-    label.numberOfLines = 0
-    
-    var fullString = "\n\n"
-    
-    let title1 = "  ToolBox Contains (Left to Right):  "
-    let bullet1 = ["  Bounding Box Label  ", "  Point Label  ", "  Label Color  ", "  Selected Label Color  ", "  Delete Label  "]
-    
-    let title2 = "  Operations:  "
-    let bullet2 = ["  Drag finger to Scroll  ", "  Tap Screen to Place Label  "]
-    
-    let title3 = "  How to Select:  "
-    let bullet3 = ["  Tap on Label or Inside Label  ", "  (Selection Box) - Hold Down  " , "(next)  Finger and Drag around Label  "]
-    
-    let title4 = "  Selected Operations  "
-    let bullet4 = ["  Use Pinch Gesture to Shrink Box  ", "  Use Expand Gesture to Grow Box  ", "  Hold and Drag to Move Box  ", "  Tap Inside to Delete Box  ", "  Tap Outside to Deselect Box  "]
-    
-    fullString += addTitleAndBulletPoints(title1, bullet1)
-    fullString += addTitleAndBulletPoints(title2, bullet2)
-    fullString += addTitleAndBulletPoints(title3, bullet3)
-    fullString += addTitleAndBulletPoints(title4, bullet4)
-    
-    label.text = fullString
-    
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.backgroundColor = .lightGray
-    label.layer.masksToBounds = true
-    label.layer.cornerRadius = 8.0
-    return label
-}()
-*/
-
-func addTitleAndBulletPoints(_ title: String, _ bulletString: [String]) -> String {
-    var labelString = "  " + title + "\n"
-    
-    for string1: String in bulletString {
-        let bulletPoint: String = " \u{2022}"
-        let start = string1.index(string1.startIndex, offsetBy: 0)
-        let end = string1.index(string1.startIndex, offsetBy: 5)
-        var formattedString: String = ""
-        if string1[start...end] == "(next)" {
-            let newStart = string1.index(string1.startIndex, offsetBy: 6)
-            let newEnd = string1.index(string1.endIndex, offsetBy: -1)
-            formattedString += "    \(string1[newStart...newEnd]) \n"
-        } else {
-            formattedString += "  \(bulletPoint) \(string1) \n"
-        }
-        labelString += formattedString
-    }
-    
-    return labelString
-}
+// Each list has a horizontal and vertical version
 
 let instructionsLabel1Vertical: UILabel = {
     let label = UILabel()
     label.numberOfLines = 0
-    var orientation = "vertical"
     var title = ""
     var bullet = [String]()
-    if orientation == "vertical" {
-        title = "     ToolBox Contains: "
-        bullet = ["  Bounding Box Label  ", "  Point Label  ", "  Label Color  ", "  Selected Label Color  ", "  Delete Label  "]
-    } else {
-        title = "  ToolBox Contains: "
-        bullet = ["  Bounding Box Label  ", "  Point Label  ", "  Label Color  ", "  Selected Label Color  ", "  Delete Label  "]
-    }
-    
-    
+    title = "     ToolBox Contains: "
+    bullet = ["  Bounding Box Label  ", "  Point Label  ", "  Label Color  ", "  Selected Label Color  ", "  Delete Label  "]
     label.text = addTitleAndBulletPoints(title, bullet)
     label.font = label.font.withSize(13)
     label.translatesAutoresizingMaskIntoConstraints = false
     label.backgroundColor = .lightGray
     label.layer.masksToBounds = true
-    //label.layer.cornerRadius = 8.0
     
     return label
 }()
@@ -171,24 +54,15 @@ let instructionsLabel1Vertical: UILabel = {
 let instructionsLabel1Horizontal: UILabel = {
     let label = UILabel()
     label.numberOfLines = 0
-    var orientation = "vertical"
     var title = ""
     var bullet = [String]()
-    if orientation == "vertical" {
-        title = "     ToolBox Contains: "
-        bullet = ["  Bounding Box Label  ", "  Point Label  ", "  Label Color  ", "  Selected Label Color  ", "  Delete Label  "]
-    } else {
-        title = "  ToolBox Contains: "
-        bullet = ["  Bounding Box Label  ", "  Point Label  ", "  Label Color  ", "  Selected Label Color  ", "  Delete Label  "]
-    }
-    
-    
+    title = "     ToolBox Contains: "
+    bullet = ["  Bounding Box Label  ", "  Point Label  ", "  Label Color  ", "  Selected Label Color  ", "  Delete Label  "]
     label.text = addTitleAndBulletPoints(title, bullet)
     label.font = label.font.withSize(13)
     label.translatesAutoresizingMaskIntoConstraints = false
     label.backgroundColor = .lightGray
     label.layer.masksToBounds = true
-    //label.layer.cornerRadius = 8.0
     
     return label
 }()
@@ -208,7 +82,6 @@ let instructionsLabel2Vertical: UILabel = {
     label.backgroundColor = .lightGray
     label.layer.masksToBounds = true
     label.isHidden = true
-    //label.layer.cornerRadius = 8.0
     
     return label
 }()
@@ -228,7 +101,6 @@ let instructionsLabel2Horizontal: UILabel = {
     label.backgroundColor = .lightGray
     label.layer.masksToBounds = true
     label.isHidden = true
-    //label.layer.cornerRadius = 8.0
     
     return label
 }()
@@ -245,7 +117,6 @@ let instructionsLabel3Vertical: UILabel = {
     label.translatesAutoresizingMaskIntoConstraints = false
     label.backgroundColor = .lightGray
     label.layer.masksToBounds = true
-    //label.layer.cornerRadius = 8.0
     
     return label
 }()
@@ -263,7 +134,6 @@ let instructionsLabel3Horizontal: UILabel = {
     label.translatesAutoresizingMaskIntoConstraints = false
     label.backgroundColor = .lightGray
     label.layer.masksToBounds = true
-    //label.layer.cornerRadius = 8.0
     
     return label
 }()
@@ -280,7 +150,6 @@ let instructionsLabel4Vertical: UILabel = {
     label.translatesAutoresizingMaskIntoConstraints = false
     label.backgroundColor = .lightGray
     label.layer.masksToBounds = true
-    //label.layer.cornerRadius = 8.0
     
     return label
 }()
@@ -298,7 +167,6 @@ let instructionsLabel4Horizontal: UILabel = {
     label.translatesAutoresizingMaskIntoConstraints = false
     label.backgroundColor = .lightGray
     label.layer.masksToBounds = true
-    //label.layer.cornerRadius = 8.0
     
     return label
 }()

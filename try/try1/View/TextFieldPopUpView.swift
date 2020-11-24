@@ -42,11 +42,8 @@ class TextFieldPopUpView: UIView {
     }
     
     private func setupLayout() {
-        //TextField.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 400).isActive = true
         TextField.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         TextField.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        //TextField.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
-        //TextField.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -30).isActive = true
         TextField.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
         TextField.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
         TextField.heightAnchor.constraint(equalToConstant: 40).isActive = true

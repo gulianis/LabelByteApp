@@ -23,10 +23,6 @@ class LoginView: UIView {
     let TitleLabelInfo: UILabel = {
         let Label = UILabel()
         Label.text = "Fabel"
-        //Label.textAlignment = .center
-        //Label.lineBreakMode = .byWordWrapping
-        //Label.textColor = .systemBlue
-        //Label.font = Label.font.withSize(75)
         Label.font = UIFont(name: "Gill Sans", size: 75)
         Label.translatesAutoresizingMaskIntoConstraints = false
         return Label
@@ -35,17 +31,12 @@ class LoginView: UIView {
     let LoginLabelInfo: UILabel = {
         let Label = UILabel()
         Label.text = "Enter email and password to log in"
-        //Label.textAlignment = .center
-        //Label.lineBreakMode = .byWordWrapping
         Label.font = Label.font.withSize(22)
-        //Label.textColor = .systemBlue
-        //Label.textColor = .systemBlue
         Label.translatesAutoresizingMaskIntoConstraints = false
         return Label
     }()
     
     let EmailInfo: UITextField = {
-        //let Email = UITextField (frame: CGRect(x: 10, y: 300, width: 500, height: 40))
         let Email = UITextField()
         Email.placeholder = "Email"
         Email.borderStyle = UITextField.BorderStyle.roundedRect
@@ -114,94 +105,21 @@ class LoginView: UIView {
         TextFieldStackView.addArrangedSubview(PasswordInfo)
         LoginStackView.addArrangedSubview(LoginLabelInfo)
         LoginStackView.addArrangedSubview(TextFieldStackView)
-        //LoginStackView.addArrangedSubview(EmailInfo)
-        //LoginStackView.addArrangedSubview(PasswordInfo)
         LoginStackView.addArrangedSubview(LoginButtonInfo)
         TotalStackView.addArrangedSubview(TitleLabelInfo)
         TotalStackView.addArrangedSubview(LoginStackView)
-        //TotalStackView.addArrangedSubview(LoginButtonInfo)
         self.addSubview(TotalStackView)
-        /*
-        self.addSubview(TitleLabelInfo)
-        self.addSubview(EmailInfo)
-        self.addSubview(PasswordInfo)
-        self.addSubview(LoginButtonInfo)
-        */
         setupLayout()
     }
     
     private func setupLayout() {
-        //LabelInfo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        /*
-        TitleLabelInfo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        TitleLabelInfo.topAnchor.constraint(equalTo: self.topAnchor, constant: 100).isActive = true
-        
-        LoginLabelInfo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        LoginLabelInfo.topAnchor.constraint(equalTo: TitleLabelInfo.bottomAnchor, constant: 50).isActive = true
-        
-        EmailInfo.topAnchor.constraint(equalTo: LoginLabelInfo.bottomAnchor, constant: 20).isActive = true
-        EmailInfo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        EmailInfo.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
-        EmailInfo.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
-        
-        PasswordInfo.topAnchor.constraint(equalTo: EmailInfo.bottomAnchor, constant: 10).isActive = true
-        PasswordInfo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        PasswordInfo.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
-        PasswordInfo.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
-        
-        LoginButtonInfo.topAnchor.constraint(equalTo: PasswordInfo.bottomAnchor, constant: 50).isActive = true
-        LoginButtonInfo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        LoginButtonInfo.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 25).isActive = true
-        LoginButtonInfo.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -25).isActive = true
-        LoginButtonInfo.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        */
-        /*
-        TitleLabelInfo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        TitleLabelInfo.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        
-        EmailInfo.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
-        EmailInfo.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
-        EmailInfo.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        PasswordInfo.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
-        PasswordInfo.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
-        PasswordInfo.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        LoginButtonInfo.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor, constant: 25).isActive = true
-        LoginButtonInfo.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -25).isActive = true
-        LoginButtonInfo.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        //TotalStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        //TotalStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        TotalStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-        TotalStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        TotalStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        TotalStackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
-        //LoginButtonInfo.bottomAnchor.constraint(equalTo:self.safeAreaLayoutGuide.bottomAnchor, constant: -250).isActive = true
-        */
-        //TitleLabelInfo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        
-        //TitleLabelInfo.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 150).isActive = true
-        
-        //EmailInfo.topAnchor.constraint(equalTo: TitleLabelInfo.bottomAnchor, constant: 20).isActive = true
-        //EmailInfo.topAnchor.constraint(equalTo: TitleLabelInfo.bottomAnchor, constant: 50).isActive = true
-        //EmailInfo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        
         EmailInfo.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
-        //EmailInfo.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
-        
-        //EmailInfo.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        //PasswordInfo.topAnchor.constraint(equalTo: EmailInfo.bottomAnchor, constant: 10).isActive = true
-        //PasswordInfo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        
         PasswordInfo.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
-        //PasswordInfo.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
         PasswordInfo.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        //LoginButtonInfo.topAnchor.constraint(equalTo: PasswordInfo.bottomAnchor, constant: 20).isActive = true
+
         LoginButtonInfo.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 25).isActive = true
-        //LoginButtonInfo.rightAnchor.constraint(equalTo: self.safeAreaLayoutGuide.rightAnchor, constant: -25).isActive = true
+
         LoginButtonInfo.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         TotalStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true

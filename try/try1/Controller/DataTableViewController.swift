@@ -8,15 +8,6 @@
 import UIKit
 import CoreData
 
-/*
-struct ImageItem {
-    var name:String
-    var saved:Bool
-}
-*/
-
-//var zipFileName = ""
-
 class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -27,9 +18,8 @@ class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
     
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>!
     
-    var labelType = ""
-    
     func save() {
+        // Save to Core Data
         do {
             try self.context.save()
         } catch {
@@ -38,6 +28,7 @@ class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
     }
     
     func fetchCall() {
+        // Load Image Names for current account
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Data")
         let sortByTitle = NSSortDescriptor(key: "saved", ascending: true)
         let sortByName = NSSortDescriptor(key: "name", ascending: true)
@@ -55,13 +46,16 @@ class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
     }
     
     func recieveImageNameDict(_ name: String) -> [String: String] {
+        // Gets Image Names from server
         var DictString = ""
+        // Uses semaphore to wait for network call till data recieved
         let semaphore = DispatchSemaphore(value: 0)
         RecieveImageNames(name) { output in
             DictString = output
             semaphore.signal()
         }
         semaphore.wait()
+        // Converts DictString to usable format
         let jsonData = DictString.data(using: .utf8)!
         let dictionary = try? JSONSerialization.jsonObject(with: jsonData)
         if let dataDictionary = dictionary as? [String: String] {
@@ -72,6 +66,7 @@ class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
     }
     
     func imageNames() {
+        // Saves image names to Core Data
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Data")
         let dataDictionary = recieveImageNameDict(zipFileObject!.name!)
         for (imageName, saved) in dataDictionary {
@@ -87,12 +82,15 @@ class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
     
     func CallImageRequestCount(_ imageName: String) -> Int {
         var result = ""
+        // Gets Image Count from server
         let semaphore = DispatchSemaphore(value: 0)
+        // Uses semaphore to wait for network call till data recieved
         ImageRequestCount(zipFileObject!.name!, imageName) { output in
             result = output
             semaphore.signal()
         }
         semaphore.wait()
+        // Converts DictString to usable format
         let jsonData = result.data(using: .utf8)!
         let dictionary = try? JSONSerialization.jsonObject(with: jsonData)
         if let Data = dictionary as? [String: Int] {
@@ -107,18 +105,13 @@ class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
         self.navigationItem.hidesBackButton = false
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
         
+        // Only Call if never been accessed before
+        // Images in a zip file can never change
         if zipFileObject!.clicked == false {
             imageNames()
         }
         zipFileObject!.clicked = true
         save()
-        //imageNameList = imageNames()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
         tableView.tableFooterView = UIView()
     }
     
@@ -134,7 +127,6 @@ class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         if let frc = fetchedResultsController {
-            print(frc.sections!.count)
             return frc.sections!.count
         }
         return 0
@@ -142,6 +134,7 @@ class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
     
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        // Categorizes into has been labeled or not
         switch (zipFileObject!.unsaved_data_count) {
             case 0:
                 return "Labeled"
@@ -174,6 +167,7 @@ class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
         }
         let image = object as! Data
         cell.textLabel?.text = image.name
+        // Number of image calls left
         cell.detailTextLabel?.text = String(10 - image.clicked_count)
         return cell
     }
@@ -184,102 +178,35 @@ class DataTableView: UITableViewController, NSFetchedResultsControllerDelegate {
             fatalError("Attempt to configure cell without a managed object")
         }
         let image = object as! Data
-        print("WE REACHED")
+        // Check Core Data to see if image has been accessed less than 10 times
+        // Mechanism to limit server requests
         if image.clicked_count < 10 {
+            // Update image count with server count
+            // Only push new view if image has been accessed less than 10 times
             let count = Int(CallImageRequestCount(image.name!))
-            print("HERE IS COUNT:")
             image.clicked_count = Int16(count)
-            print(count)
             save()
-            print(image.clicked_count)
             if image.clicked_count < 10 {
                 image.clicked_count += 1
                 save()
                 VC.imageData = image
                 self.navigationController?.pushViewController(VC, animated: true)
             } else {
-                self.definesPresentationContext = true
-                let vc = SuccessViewController()
-                vc.modalPresentationStyle = .overCurrentContext
-                vc.modalTransitionStyle = .crossDissolve
-                vc.message = "Reached Access Limit"
-                present(vc, animated: true, completion: nil)
-                tableView.reloadData()
+                showLimitView()
             }
         } else {
-            self.definesPresentationContext = true
-            let vc = SuccessViewController()
-            vc.modalPresentationStyle = .overCurrentContext
-            vc.modalTransitionStyle = .crossDissolve
-            vc.message = "Reached Access Limit"
-            present(vc, animated: true, completion: nil)
-            tableView.reloadData()
+            showLimitView()
         }
     }
     
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
-
-        // Configure the cell...
-        cell.textLabel?.text = dataList[indexPath.row]
-
-        return cell
+    func showLimitView() {
+        self.definesPresentationContext = true
+        let vc = SuccessViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.modalTransitionStyle = .crossDissolve
+        vc.message = "Reached Access Limit"
+        present(vc, animated: true, completion: nil)
+        tableView.reloadData()
     }
-    */
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import CoreData
 
-
+/*
 struct Rectangle {
     var x: Double
     var y: Double
@@ -28,6 +28,7 @@ enum KeychainError: Error {
     case unexpectedPasswordData
     case unhandledError(status: OSStatus)
 }
+ */
 
 class DiskStatus {
 
@@ -95,13 +96,6 @@ class DiskStatus {
 
 }
 
-func blockRefresh() {
-    DispatchQueue.main.asyncAfter(deadline: .now() + 60.0) { // Change `2.0` to the desired number of seconds.
-       // Code you want to be delayed
-        block_refresh = false
-    }
-}
-
 class ModelTest {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -144,14 +138,58 @@ class ModelTest {
 
 var currentUsername = ""
 
-var block_refresh = false
-var date_count = 0
-var year = 0
-var day = 0
-var hour = 0
-var minute = 0
- 
+var labelsPerImage = 10
 
+var RefreshOperation = LimitedOperation(limit: 5)
+var SaveOperation = LimitedOperation(limit: 10)
 
+class LimitedOperation {
+    // Mechanism to block operations if operation continues too many times in a minute
+    
+    var block_refresh = false
+    var count = 0
+    var year = 0
+    var day = 0
+    var hour = 0
+    var minute = 0
+    let limit_count: Int
+    
+    init(limit: Int) {
+        limit_count = limit
+    }
+        
+    func access() -> Bool {
+        return !self.block_refresh
+    }
+    
+    func incrementToLimit() {
+        let date = Date()
+        let calendar = Calendar.current
+        let current_year = calendar.component(.year, from: date)
+        let current_day = calendar.component(.day, from: date)
+        let current_hour = calendar.component(.hour, from: date)
+        let current_minute = calendar.component(.minute, from: date)
+        if current_year == self.year && current_day == self.day && current_hour == self.hour && current_minute == self.minute {
+            if self.count >= self.limit_count - 1 {
+                self.block_refresh = true
+                blockRefresh()
+            }
+            self.count += 1
+        } else {
+            self.year = current_year
+            self.day = current_day
+            self.hour = current_hour
+            self.minute = current_minute
+            self.count = 0
+        }
+    }
+    
+    func blockRefresh() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 300.0) { // Change `2.0` to the desired number of seconds.
+           // Code you want to be delayed
+            self.block_refresh = false
+        }
+    }
+}
 
 

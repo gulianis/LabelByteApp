@@ -19,15 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        //window?.rootViewController = ViewController()
-        //window?.rootViewController = PopUpViewController()
         let nc = UINavigationController(rootViewController: LoginViewController())
         window?.rootViewController = nc
-        //window?.rootViewController = LabelMenuViewController()
-        //window?.rootViewController = LoginViewController()
-        //window?.rootViewController = TableViewController()
-        //window?.rootViewController = TableVC()
-        //window?.rootViewController = Table1()
         window?.makeKeyAndVisible()
     }
 

@@ -10,6 +10,8 @@ import Foundation
 
 let ip = "54.176.47.114"
 
+// All functions in this file are POST or GET Requests based on variables
+// asked for in the function
 
 func ReceiveToken(_ username: String, _ password: String, completionBlock: @escaping (String) -> Void) {
     // Prepare URL

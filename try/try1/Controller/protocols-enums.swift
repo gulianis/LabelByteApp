@@ -2,20 +2,15 @@
 //  protocols.swift
 //  try1
 //
-//  Created by Sandeep Guliani on 10/29/20.
+//  Created by Sachin Guliani on 10/29/20.
 //
 
 import Foundation
 
 protocol isAbleToReceiveData {
-    
-    //var effectView: UIVisualEffectView { get set }
     func pass(data: String)  //data: string is an example parameter
 }
 
-protocol receiveDataFromLabelMenu {
-    func onDataLabelMenuClose(NewLabelType: TypeOfLabel, NewUnSelectedColor: Color, NewSelectedColor: Color)
-}
 
 protocol LabelOperations {
     

@@ -16,10 +16,6 @@ class PopUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //view.backgroundColor = .white
-        
-        //self.view = view
-        
         let tap = UITapGestureRecognizer(target: self, action: #selector(Tapped))
         tap.numberOfTapsRequired = 1
         view.addGestureRecognizer(tap)
@@ -28,18 +24,7 @@ class PopUpViewController: UIViewController {
         setupConstraints()
         layoutTrait(traitCollection: UIScreen.main.traitCollection)
 
-        // Do any additional setup after loading the view.
     }
-    
-    /*
-    override func loadView() {
-        let view = PopUpView()
-        //view.backgroundColor = .white
-
-        self.view = view
-        
-    }
-    */
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 
@@ -92,12 +77,10 @@ class PopUpViewController: UIViewController {
     }
     
     func layoutTrait(traitCollection: UITraitCollection) {
+        // Sets up Instructions differently horizontally for iphones
+        // so it fits on screen
         if traitCollection.verticalSizeClass == .compact {
             instructionsLabelStackView.axis = .horizontal
-            //instructionsLabel1.font = instructionsLabel1.font.withSize(14)
-            //instructionsLabel2.font = instructionsLabel2.font.withSize(14)
-            //instructionsLabel3.font = instructionsLabel3.font.withSize(14)
-            //instructionsLabel4.font = instructionsLabel4.font.withSize(14)
             instructionsLabel1Vertical.isHidden = true
             instructionsLabel1Horizontal.isHidden = false
             instructionsLabel2Vertical.isHidden = true
@@ -125,22 +108,11 @@ class PopUpViewController: UIViewController {
     
     @objc func Tapped(sender:UITapGestureRecognizer) {
         if sender.state == .ended {
+            // Make sure constraints are destroyed as view is dismissed
             NSLayoutConstraint.deactivate(compactConstraints)
             NSLayoutConstraint.deactivate(regularConstraints)
             dismiss(animated: false, completion: nil)
         }
     }
-    //unowned var MainView: PopUpView { return self.view as! PopUpView }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

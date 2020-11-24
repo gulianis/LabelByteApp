@@ -15,25 +15,25 @@ var UnSelectedColor: Color = .black
 var SelectedColor: Color = .red
 
 var CurrentLabelType: TypeOfLabel = .boundingBox
-//var UnSelectedColor: Color = .black
-//var SelectedColor: Color = .red
 
 var CurrentColorButtonSelected: UIButton?
 var SelectedOrUnSelectedButton: UnselectedOrSelected = .UnSelected
 
-class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFromLabelMenu, isAbleToReceiveData {
+class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToReceiveData {
+    
     
     var labelObjects = [LabelOperations]()
     
     var imageData: Data?
        
-    var redItem: Int? = nil
+    var selectedItem: Int? = nil
 
     var dimension = Double(15)
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     func save() {
+        // Save to Core Data
         do {
             try self.context.save()
         } catch {
@@ -42,7 +42,9 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     func getImage() {
+        // Gets Image from server
         var image: UIImage? = UIImage()
+        // Uses semaphore to wait for network call till data recieved
         let semaphore = DispatchSemaphore(value: 0)
         ReceiveImage(imageData!.ofZipFile!.name!, imageData!.name!) { output in
             image = output
@@ -58,13 +60,16 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     func CallSendCoordinates(_ data: [String: String]) {
+        // Sends Label Data to server
         var result = ""
+        // Uses semaphore to wait for network call till data recieved
         let semaphore = DispatchSemaphore(value: 0)
         SendCoordinates(data) { output in
             result = output
             semaphore.signal()
         }
         semaphore.wait()
+        // Make Saved message
         self.definesPresentationContext = true
         let vc = SuccessViewController()
         vc.modalPresentationStyle = .overCurrentContext
@@ -74,19 +79,19 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
        
     func getCoordinates() {
+        // Get Label Data from server
         var DictString = ""
         let semaphore = DispatchSemaphore(value: 0)
+        // Uses semaphore to wait for network call till data recieved
         GETCoordinates(imageData!.ofZipFile!.name!, imageData!.name!) { output in
             DictString = output
-            print("abc")
-            print(DictString)
-            print("def")
             semaphore.signal()
         }
         semaphore.wait()
+        // Parse DictString to usable format
         let jsonData = DictString.data(using: .utf8)!
         let dictionary = try? JSONSerialization.jsonObject(with: jsonData)
-        print(dictionary)
+        // Use parsed data to create labels and display them
         if let Data = dictionary as? [String: String] {
             var count = Int(Data["BoundingBox_count"]!)
             var i = 0
@@ -130,6 +135,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
        
     func clearCache() {
+        // Clears previously downloaded image
         let cache = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
 
 
@@ -147,6 +153,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // clears view labels
         for view in largeImage.subviews {
             view.removeFromSuperview()
         }
@@ -191,12 +198,12 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
         clearCache()
         getImage()
         getCoordinates()
-        print(DiskStatus.usedDiskSpace)
         scrollView.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        // Deactivates previous constraints before setting new constrains
         NSLayoutConstraint.deactivate(regularConstraints)
         NSLayoutConstraint.deactivate(compactConstraints)
 
@@ -284,6 +291,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     func layoutTrait(traitCollection: UITraitCollection) {
+        // Set up view differently for horizontal and vertical for iphones
         if traitCollection.verticalSizeClass == .compact {
             ToolBoxStackView.axis = .vertical
             ColorPickerStackView.axis = .vertical
@@ -298,40 +306,34 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
 
     
-    func DisplayTextField() {
+    func DisplayTextField(_ currentText: String) {
+        // Sets up textfield for classification
         self.definesPresentationContext = true
         let vc = TextFieldPopUpViewController()
-        //vc.modalPresentationStyle = .overCurrentContext
-        //vc.modalTransitionStyle = .crossDissolve
+        vc.currentText = currentText
         vc.delegate = self
-        //self.view.addSubview(effectView)
-        //self.view.addSubview(effectView)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.pushViewController(vc, animated: false)
-        //present(vc, animated: true, completion: nil)
     }
 
     var RectangleIndexForChangingLabel = 0
     func pass(data:String) {
-        print("THE DATA COUNT:")
-        print(data.count)
-        print(data)
-        if data.count > 0 {
-            labelObjects[RectangleIndexForChangingLabel].addClassification(" " + data + " ")
-        } else {
-            labelObjects[RectangleIndexForChangingLabel].addClassification("  +  ")
-        }
+        // Takes text label data and attaches classification to label
+        labelObjects[RectangleIndexForChangingLabel].addClassification(data)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
+    /*
     func onDataLabelMenuClose(NewLabelType: TypeOfLabel, NewUnSelectedColor: Color, NewSelectedColor: Color) {
         CurrentLabelType = NewLabelType
         UnSelectedColor = NewUnSelectedColor
         SelectedColor = NewSelectedColor
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
+    */
        
     func postLabel() {
+        // Packages Label Data and sends it to server
         var data = ["ImageName": imageData!.name!, "ZipFile": imageData!.ofZipFile!.name!]
         var i = 0
         var j = 0
@@ -355,12 +357,15 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
 
     
     func updateDimension(_ newDimension: Double) {
+        // Updates Point label dimension so all future point labels can be same size
+        // of currently display point labels
         dimension = newDimension
         print(dimension)
     }
 
        
     @objc func InstructionsPress() {
+        // Displays Instructions
         if largeImage.image != nil {
             self.definesPresentationContext = true
             let vc = PopUpViewController()
@@ -372,35 +377,24 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
         }
     }
     
-    @objc func LabelMenu() {
-        /*
-        self.definesPresentationContext = true
-        let vc = LabelMenuViewController()
-        vc.modalPresentationStyle = .overCurrentContext
-        vc.modalTransitionStyle = .crossDissolve
-        vc.delegate = self
-        vc.CurrentLabelType = CurrentLabelType
-        vc.UnSelectedColor = UnSelectedColor
-        vc.SelectedColor = SelectedColor
-        //self.view.addSubview(effectView)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        present(vc, animated: true, completion: nil)
-        */
-    }
-    
     @objc func BoundingBoxButtonPress() {
+        // Sets Label type to Bounding Box
         CurrentLabelType = .boundingBox
         BoundingBoxButton.backgroundColor = .lightGray
         PointButton.backgroundColor = .white
     }
     
     @objc func PointButtonPress() {
+        // Sets Label type to Point
         CurrentLabelType = .point
         PointButton.backgroundColor = .lightGray
         BoundingBoxButton.backgroundColor = .white
     }
     
     @objc func DESButtonPress() {
+        // DeSelected or UnSelected
+        // Allows you to choose UnSelected Color type
+        // from color chooser
         ColorPickerStackView.isHidden = false
         SelectedOrUnSelectedButton = .UnSelected
         if CurrentColorButtonSelected == nil {
@@ -428,6 +422,8 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     @objc func SELButtonPress() {
+        // Allows you to choose Selected Color type
+        // from color chooser
         ColorPickerStackView.isHidden = false
         SelectedOrUnSelectedButton = .Selected
         if CurrentColorButtonSelected == nil {
@@ -456,14 +452,16 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     @objc func DELButtonPress() {
-        if redItem != nil {
-            labelObjects[redItem!].removeShape()
-            labelObjects.remove(at: redItem!)
-            redItem = nil
+        // Deletes Selected Object when pressed
+        if selectedItem != nil {
+            labelObjects[selectedItem!].removeShape()
+            labelObjects.remove(at: selectedItem!)
+            selectedItem = nil
         }
     }
     
     @objc func blackButtonPress() {
+        // Makes UnSelected or Selected Black
         CurrentColorButtonSelected!.backgroundColor = .white
         blackButton.backgroundColor = .gray
         CurrentColorButtonSelected = blackButton
@@ -478,6 +476,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     @objc func redButtonPress() {
+        // Makes UnSelected or Selected Red
         CurrentColorButtonSelected!.backgroundColor = .white
         redButton.backgroundColor = .gray
         CurrentColorButtonSelected = redButton
@@ -493,6 +492,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     @objc func greenButtonPress() {
+        // Makes UnSelected or Selected green
         CurrentColorButtonSelected!.backgroundColor = .white
         greenButton.backgroundColor = .gray
         CurrentColorButtonSelected = greenButton
@@ -507,6 +507,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     @objc func blueButtonPress() {
+        // Makes UnSelected or Selected Blue
         CurrentColorButtonSelected!.backgroundColor = .white
         blueButton.backgroundColor = .gray
         CurrentColorButtonSelected = blueButton
@@ -521,6 +522,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     @objc func orangeButtonPress() {
+        // Makes UnSelected or Selected Orange
         CurrentColorButtonSelected!.backgroundColor = .white
         orangeButton.backgroundColor = .gray
         CurrentColorButtonSelected = orangeButton
@@ -535,6 +537,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     @objc func purpleButtonPress() {
+        // Makes UnSelected or Selected Purple
         CurrentColorButtonSelected!.backgroundColor = .white
         purpleButton.backgroundColor = .gray
         CurrentColorButtonSelected = purpleButton
@@ -549,6 +552,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     @objc func yellowButtonPress() {
+        // Makes UnSelected or Selected Yellow
         CurrentColorButtonSelected!.backgroundColor = .white
         yellowButton.backgroundColor = .gray
         CurrentColorButtonSelected = yellowButton
@@ -563,17 +567,31 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     
-       
+    /*
     @objc func Logout() {
         dismiss(animated: true, completion: nil)
     }
+    */
        
     @objc func ButtonPress() {
+        // Calls postLabel() when saved button pressed
         if largeImage.image == nil {
             return
         }
-        postLabel()
         ButtonInfo.backgroundColor = .systemBlue
+        SaveOperation.incrementToLimit()
+        // Blocks excessive saves
+        if SaveOperation.access() == false {
+            self.definesPresentationContext = true
+            let vc = SuccessViewController()
+            vc.modalPresentationStyle = .overCurrentContext
+            vc.modalTransitionStyle = .crossDissolve
+            vc.message = "Blocked 300 Seconds"
+            present(vc, animated: true, completion: nil)
+            return
+        }
+        postLabel()
+        // Once Saved sets Image as complete in DataTableVC
         if imageData!.saved == false {
             imageData!.saved = true
             imageData!.ofZipFile!.unsaved_data_count -= 1
@@ -590,20 +608,21 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     
     
     @objc func pinched(_ sender: UIPinchGestureRecognizer) {
+        // Expands or shrinks label based on pinch
         if sender.numberOfTouches < 2 {
+            // If one finger removed from singer during pinch gesture return
             return
         }
         let Ax: Double? = Double(sender.location(ofTouch: 0, in: self.view).x)
         let Ay: Double? = Double(sender.location(ofTouch: 0, in: self.view).y)
         let Bx: Double? = Double(sender.location(ofTouch: 1, in: self.view).x)
         let By: Double? = Double(sender.location(ofTouch: 1, in: self.view).y)
-        if redItem != nil {
-            switch (labelObjects[redItem!]) {
+        if selectedItem != nil {
+            switch (labelObjects[selectedItem!]) {
                 case is BoundingBoxLabel:
-                    let redLabelObject = labelObjects[redItem!]
+                    let redLabelObject = labelObjects[selectedItem!]
                     redLabelObject.changeShapeSize(Ax!, Ay!, Bx!, By!)
                 default:
-                    print("start")
                     for items in labelObjects {
                         if items is PointLabel {
                             items.changeShapeSize(Ax!, Ay!, Bx!, By!)
@@ -617,26 +636,26 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
     }
     
     @objc func Tapped(sender:UITapGestureRecognizer) {
-        print("REACHED")
         if sender.state == .ended {
             let touchLocation: CGPoint = sender.location(in: sender.view)
             let offsetX = Double(scrollView.contentOffset.x)
             let offsetY = Double(scrollView.contentOffset.y)
             let x = Double(touchLocation.x) + offsetX - Double(scrollView.frame.origin.x)
             let y = Double(touchLocation.y) + offsetY - Double(scrollView.frame.origin.y)
+            // Check if Color Chooser button selected
             if ColorPickerStackView.isHidden == false {
                 print(TotalStackViewBackground.frame.origin.y)
                 let minX = ColorPickerStackView.frame.origin.x + TotalStackViewBackground.frame.origin.x
                 let maxX = minX + ColorPickerStackView.frame.size.width - TotalStackViewBackground.frame.origin.x
                 let minY = ColorPickerStackView.frame.origin.y + TotalStackViewBackground.frame.origin.y
                 let maxY = minY + ColorPickerStackView.frame.size.height - TotalStackViewBackground.frame.origin.y
-                print(maxY)
-                print(touchLocation.y)
+                // Exits out of Color Chooser if touching outside Color Chooser
                 if Double(touchLocation.x) < Double(minX) || Double(touchLocation.x) > Double(maxX) || Double(touchLocation.y) < Double(minY) || Double(touchLocation.y) > Double(maxY) {
                     ColorPickerStackView.isHidden = true
                 }
                 return
             }
+            // Dont do anything when outside scroll view or not touching buttons
             if touchLocation.x < scrollView.frame.origin.x {
                 return
             }
@@ -649,52 +668,47 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
             if touchLocation.y > scrollView.frame.origin.y + scrollView.frame.size.height {
                 return
             }
-            if redItem != nil {
-                let intersectionResult = labelObjects[redItem!].intersection(x, y)
+            // When there is a selected label
+            // if touched inside delete
+            // if touched outside make in unselected
+            if selectedItem != nil {
+                let intersectionResult = labelObjects[selectedItem!].intersection(x, y)
                 if intersectionResult == .shape {
-                    labelObjects[redItem!].removeShape()
-                    labelObjects.remove(at: redItem!)
-                    redItem = nil
+                    labelObjects[selectedItem!].removeShape()
+                    labelObjects.remove(at: selectedItem!)
+                    selectedItem = nil
                     return
                 } else if intersectionResult == .none {
-                    print("YESYESYESYES")
-                    labelObjects[redItem!].makeUnSelectedColor()
-                    redItem = nil
+                    labelObjects[selectedItem!].makeUnSelectedColor()
+                    selectedItem = nil
                     return
                 }
             }
+            // Check if label was selected - if so make it selected
+            // Check if Bounding Box + for adding classification is selected
             for (i, labelObject) in labelObjects.enumerated() {
                 let intersectionResult = labelObjects[i].intersection(x, y)
                 if intersectionResult == .shape {
-                    redItem = i
+                    selectedItem = i
                     labelObject.makeSelectedColor()
                     return
                 } else if intersectionResult == .label {
                     RectangleIndexForChangingLabel = i
-                    DisplayTextField()
+                    DisplayTextField(labelObject.getClassification())
                     print("FINISHED")
                     return
                 }
             }
-            if touchLocation.x < scrollView.frame.origin.x {
-                return
+            // Add Label Type depending on whether BoundingBox of Point is selected
+            if labelObjects.count < labelsPerImage {
+                switch (CurrentLabelType) {
+                    case .boundingBox:
+                        labelObjects.append(BoundingBoxLabel(x: x, y: y, delegate: self))
+                    default:
+                        labelObjects.append(PointLabel(x: x, y: y, dimension: dimension, delegate: self))
+                }
+                labelObjects.last!.createShape()
             }
-            if touchLocation.x > scrollView.frame.origin.x + scrollView.frame.size.width {
-                return
-            }
-            if touchLocation.y < scrollView.frame.origin.y {
-                return
-            }
-            if touchLocation.y > scrollView.frame.origin.y + scrollView.frame.size.height {
-                return
-            }
-            switch (CurrentLabelType) {
-                case .boundingBox:
-                    labelObjects.append(BoundingBoxLabel(x: x, y: y, delegate: self))
-                default:
-                    labelObjects.append(PointLabel(x: x, y: y, dimension: dimension, delegate: self))
-            }
-            labelObjects.last!.createShape()
         }
     }
     
@@ -709,8 +723,8 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
         let offsetY = Double(scrollView.contentOffset.y)
         let x = Double(sender.location(ofTouch: 0, in: self.view).x) + offsetX - Double(scrollView.frame.origin.x)
         let y = Double(sender.location(ofTouch: 0, in: self.view).y) + offsetY - Double(scrollView.frame.origin.y)
+        // Set up Selector
         if sender.state == .began {
-            print("It has begun")
             largeImage.addSubview(Selector)
             Selector.frame.origin.x = CGFloat(x)
             Selector.frame.origin.y = CGFloat(y)
@@ -734,21 +748,25 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
             }
             Selector.layer.borderWidth = 4
         }
+        // Remove Selector
         if sender.state == .ended {
             Selector.removeFromSuperview()
             Selector.frame.size.width = 0
             Selector.frame.size.height = 0
             print(HighlightedSelected)
             if HighlightedSelected != -1 {
-                redItem = HighlightedSelected
+                selectedItem = HighlightedSelected
             }
             HighlightedSelected = -1
             return
         }
-        if redItem != nil {
-            labelObjects[redItem!].moveShape(x, y)
+        // If there is a Selected Item move it
+        // Otherwise Enlarge Selector
+        if selectedItem != nil {
+            labelObjects[selectedItem!].moveShape(x, y)
         } else {
-            //largeImage.addSubview(Selector)
+            // Dealing with different case depending on quadrant finger is in
+            // with reference to starting point of selector
             UIView.animate(withDuration: 0.1) {
                 if CGFloat(x) < self.StartX && CGFloat(y) < self.StartY {
                     self.Selector.frame.origin.x = CGFloat(x)
@@ -757,7 +775,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
                     self.Selector.frame.size.height = self.StartY - CGFloat(y)
                 }
                 if CGFloat(x) >= self.StartX && CGFloat(y) < self.StartY {
-                    print("We are in Correct")
                     self.Selector.frame.origin.x = self.StartX
                     self.Selector.frame.origin.y = CGFloat(y)
                     self.Selector.frame.size.width = CGFloat(x) - self.StartX
@@ -776,6 +793,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
                     self.Selector.frame.size.height = CGFloat(y) - self.StartY
                 }
             }
+            // Make a selected object unselected
             if HighlightedSelected > -1 {
                 labelObjects[HighlightedSelected].makeUnSelectedColor()
             }
@@ -785,6 +803,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
             let maxY = Double(Selector.frame.origin.y + Selector.frame.size.height)
             var minDistance: Double = 10000
             var minDistanceIndex: Int = -1
+            // Check if Selector surrounds label
             for (i, labelObject) in labelObjects.enumerated() {
                 if labelObject.x >= minX && labelObject.x <= maxX && labelObject.y >= minY && labelObject.y <= maxY {
                     let distance = pow(pow(labelObject.x - x, 2) + pow(labelObject.y - y, 2), 0.5)
@@ -800,7 +819,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, receiveDataFr
             HighlightedSelected = minDistanceIndex
             
         }
-        print(Selector.frame.size.width)
            
     }
 }
