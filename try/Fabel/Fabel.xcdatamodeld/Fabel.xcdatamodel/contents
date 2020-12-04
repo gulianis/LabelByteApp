@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Account" representedClassName="Account" syncable="YES">
+        <attribute name="username" optional="YES" attributeType="String"/>
+        <relationship name="file" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ZipFile" inverseName="ofAccount" inverseEntity="ZipFile"/>
+    </entity>
+    <entity name="Data" representedClassName="Data" syncable="YES">
+        <attribute name="clicked_count" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="saved" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="ofZipFile" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ZipFile" inverseName="file" inverseEntity="ZipFile"/>
+    </entity>
+    <entity name="ZipFile" representedClassName="ZipFile" syncable="YES">
+        <attribute name="clicked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="completed" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="date" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="unsaved_data_count" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="file" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Data" inverseName="ofZipFile" inverseEntity="Data"/>
+        <relationship name="ofAccount" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Account" inverseName="file" inverseEntity="Account"/>
+    </entity>
+    <elements>
+        <element name="Account" positionX="-27" positionY="54" width="128" height="73"/>
+        <element name="Data" positionX="-18" positionY="36" width="128" height="103"/>
+        <element name="ZipFile" positionX="-45" positionY="0" width="128" height="148"/>
+    </elements>
+</model>
