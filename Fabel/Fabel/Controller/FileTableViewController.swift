@@ -8,13 +8,7 @@
 import UIKit
 import CoreData
 
-//class FileTableViewController: UITableViewController, NSFetchedResultsControllerDelegate
 class FileTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
-    
-    //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
-    //var objectListUnComplete = [ZipFile]()
-    //var objectListComplete = [ZipFile]()
  
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>!
     
@@ -137,33 +131,9 @@ class FileTableViewController: UITableViewController, NSFetchedResultsController
         }
     }
     
-    /*
-    func otherFetch() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ZipFile")
-        let sortByTitle = NSSortDescriptor(key: "completed", ascending: true)
-        let sortByName = NSSortDescriptor(key: "name", ascending: true)
-        fetchRequest.sortDescriptors = [sortByTitle, sortByName]
-        let predicate = NSPredicate(format: "ofAccount == %@", account!)
-        fetchRequest.predicate = predicate
-        do {
-            let fetchedResults = try context.fetch(fetchRequest)
-            for item in fetchedResults {
-                if (item as! ZipFile).completed == true {
-                    objectListComplete.append(item as! ZipFile)
-                } else {
-                    objectListUnComplete.append(item as! ZipFile)
-                }
-            }
-        } catch let error as NSError {
-            // something went wrong, print the error.
-            print(error.description)
-        }
-    }
-    */
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationItem.hidesBackButton = true
@@ -173,7 +143,6 @@ class FileTableViewController: UITableViewController, NSFetchedResultsController
         
         
         recieveFormatZipNames()
-        //otherFetch()
     
     }
     
@@ -190,39 +159,9 @@ class FileTableViewController: UITableViewController, NSFetchedResultsController
             return frc.sections!.count
         }
         return 0
-        //return 2
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        /*
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ZipFile")
-        let predicate = NSPredicate(format: "ofAccount = %@", account!)
-        request.predicate = predicate
-        // Puts Zip Files in completed and uncompleted cateogires
-        var completed = true
-        do {
-            let results = try context.fetch(request)
-            for result in results {
-                if ((result as! ZipFile).value(forKey: "completed") as! Bool) == false {
-                    completed = false
-                    break
-                }
-            }
-        } catch {
-            print("Failed")
-        }
-        switch (completed) {
-            case true:
-                return "Complete"
-            default:
-                switch (section) {
-                    case 0:
-                        return "Incomplete"
-                    default:
-                        return "Complete"
-                }
-        }
-        */
         var completed = true
         for items in fetchedResultsController.fetchedObjects! {
             if (items as! ZipFile).completed == false {
@@ -240,7 +179,6 @@ class FileTableViewController: UITableViewController, NSFetchedResultsController
                 return "Complete"
             }
         }
-        //return "UnLabeled"
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -250,15 +188,6 @@ class FileTableViewController: UITableViewController, NSFetchedResultsController
         }
         let sectionInfo = sections[section]
         return sectionInfo.numberOfObjects
-        /*
-        switch(section) {
-        case 0:
-            return objectListUnComplete.count
-        default:
-            return objectListComplete.count
-        }
-        */
-        //return objectListUnComplete.count
     }
 
 
@@ -273,29 +202,11 @@ class FileTableViewController: UITableViewController, NSFetchedResultsController
         let zipFile = object as! ZipFile
         cell.textLabel?.text = zipFile.name
 
-        /*
-        switch (indexPath.section) {
-        case 0:
-            cell.textLabel?.text = objectListUnComplete[indexPath.row].name
-        default:
-            cell.textLabel?.text = objectListComplete[indexPath.row].name
-        }
-        */
-        //cell.textLabel?.text = objectListUnComplete[indexPath.row]
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let VC = DataTableView()
-        /*
-        switch (indexPath.section) {
-        case 0:
-            file = objectListUnComplete[indexPath.row]
-        default:
-            file = objectListComplete[indexPath.row]
-        */
-        //VC.zipFileObject = zipFileObject
-        //self.navigationController?.pushViewController(VC, animated: true)
         guard let object = self.fetchedResultsController?.object(at: indexPath) else {
             fatalError("Attempt to configure cell without a managed object")
         }

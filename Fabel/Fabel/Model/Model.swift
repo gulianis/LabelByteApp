@@ -182,15 +182,6 @@ class LimitedOperation {
         }
         return true
     }
-    
-    /*
-    func blockRefresh() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 300.0) { // Change `2.0` to the desired number of seconds.
-           // Code you want to be delayed
-            self.block_refresh = false
-        }
-    }
-    */
 }
 
 func clearCache() {
@@ -201,7 +192,9 @@ func clearCache() {
     let cachePath = cache!.path
     let filePathName = "\(cachePath)/image"
     do {
-        try FileManager.default.removeItem(atPath: filePathName)
+        if FileManager.default.fileExists(atPath: filePathName) {
+            try FileManager.default.removeItem(atPath: filePathName)
+        }
     } catch {
         print(error)
     }

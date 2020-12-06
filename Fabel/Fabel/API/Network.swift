@@ -8,7 +8,7 @@
 import UIKit
 import Foundation
 
-let ip = "54.176.47.114"
+let ip = "192.168.0.187:8000"
 
 // All functions in this file are POST or GET Requests based on variables
 // asked for in the function
@@ -103,20 +103,6 @@ func ReceiveImage(_ zipFileName: String, _ imageName: String, completionBlock: (
                                              toPath: file.path)
             let ImageView: UIImage? = UIImage(contentsOfFile: file.path)
             completionBlock!(ImageView)
-            /*
-            if ImageView != nil {
-                completionBlock(ImageView!)
-            } else {
-                completionBlock("None")
-            }
- */
-            /*
-            DispatchQueue.main.async {
-                let ImageView = UIImage(contentsOfFile: file.path)
-                print("yes")
-                completionBlock(ImageView!)
-            }
-            */
         }
         catch {
             print(error.localizedDescription)

@@ -13,7 +13,6 @@ class SuccessViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //definesPresentationContext = true
 
         switch (message) {
             case "Success":
@@ -36,25 +35,8 @@ class SuccessViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        /*
-        print(UIApplication.topViewController()!)
-        if UIApplication.topViewController()! == SuccessViewController() {
-            print("IT IS SUCCESS VIEW CONTROLLER")
-        }
-        */
-
         sleep(2)
         dismiss(animated: true, completion: nil)
-        //dismiss(animated: true, completion: nil)
-        //UIApplication.topViewController()?.dismiss(animated: true, completion: nil)
-        /*
-        if let navController = self.navigationController {
-            navController.popViewController(animated: true)
-        }else{
-            print("navigationController is nil")
-        }
-        */
-       // delegate?.isDisplaying = false
     }
     
 

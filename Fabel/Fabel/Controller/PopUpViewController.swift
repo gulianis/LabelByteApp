@@ -9,11 +9,10 @@ import UIKit
 
 class PopUpViewController: UIViewController {
 
+    weak var delegate: ImageViewController?
     
     var strings:[String] = []
     var bulletLabel: UILabel = UILabel()
-    
-    //var scrollView: UIScrollView { return ImageViewVar.scrollView }
 
     var currentInstructionsView = InstructionsView()
     var instructionsLabel1Vertical: UILabel { return currentInstructionsView.instructionsLabel1Vertical }
@@ -32,6 +31,7 @@ class PopUpViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(Tapped))
         tap.numberOfTapsRequired = 1
         view.addGestureRecognizer(tap)
+        
         
         setupUI()
         setupConstraints()
@@ -125,6 +125,7 @@ class PopUpViewController: UIViewController {
             NSLayoutConstraint.deactivate(compactConstraints)
             NSLayoutConstraint.deactivate(regularConstraints)
             dismiss(animated: false, completion: nil)
+            delegate?.navigationController?.setNavigationBarHidden(false, animated: true)
         }
     }
 

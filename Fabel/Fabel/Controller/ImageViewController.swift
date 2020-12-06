@@ -8,16 +8,7 @@
 import UIKit
 import CoreData
 
-/*
- lazy var ImageViewVar: ImageViewVariables = { [unowned self] in
-     return ImageViewVariables()
- }()
- */
-
-// class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToReceiveData
 class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToReceiveData {
-    
-    
     
     var labelObjects = [LabelOperations]()
     
@@ -26,24 +17,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
     var selectedItem: Int? = nil
 
     var dimension = Double(15)
-    
-    //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
-
-    deinit {
-        //clearCache()
-    }
-    /*
-    func save() {
-        // Save to Core Data
-        do {
-            try self.context.save()
-        } catch {
-            print("Failed saving")
-        }
-    }
-    */
-    
     
     func getImage() {
         // Gets Image from server
@@ -65,11 +38,11 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
     
     func displaySuccess(_ message: String) {
         self.definesPresentationContext = true
-        let vc = SuccessViewController()
-        vc.modalPresentationStyle = .overCurrentContext
-        vc.modalTransitionStyle = .crossDissolve
-        vc.message = message
-        present(vc, animated: true, completion: nil)
+        let success_vc = SuccessViewController()
+        success_vc.modalPresentationStyle = .overCurrentContext
+        success_vc.modalTransitionStyle = .crossDissolve
+        success_vc.message = message
+        present(success_vc, animated: true, completion: nil)
     }
     
     
@@ -147,14 +120,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //assignButton()
-        // clears view labels
-        /*
-        for view in largeImage.subviews {
-            view.removeFromSuperview()
-        }
-        */
-        
         view.backgroundColor = .white
         
 
@@ -172,13 +137,12 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
         self.view = view
         
         ToolBoxStackView = createToolBox()
-        ToolBoxVerticalStackView = createVerticalToolBox()
+        //ToolBoxVerticalStackView = createVerticalToolBox()
         
-        //assignButton()
         setupUI()
         setupConstraints()
         
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        //self.navigationController?.setNavigationBarHidden(false, animated: true)
         ButtonInfo.addTarget(self, action: #selector(DuringButtonPress), for: .touchDown)
         ButtonInfo.addTarget(self, action: #selector(ButtonPress), for: .touchUpInside)
 
@@ -198,7 +162,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
         purpleButton.addTarget(self, action: #selector(purpleButtonPress), for: .touchUpInside)
         yellowButton.addTarget(self, action: #selector(yellowButtonPress), for: .touchUpInside)
 
-        //clearCache()
         getImage()
         getCoordinates()
         
@@ -213,12 +176,11 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
         // Deactivates previous constraints before setting new constrains
         NSLayoutConstraint.deactivate(regularConstraints)
         NSLayoutConstraint.deactivate(compactConstraints)
-        //removeUI()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //self.navigationController?.setNavigationBarHidden(false, animated: false)
         layoutTrait(traitCollection: UIScreen.main.traitCollection)
     }
 
@@ -239,33 +201,9 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
         ToolStackView.addArrangedSubview(DeleteButton)
         return ToolStackView
     }
-
-    func createVerticalToolBox() -> UIStackView {
-        ToolVerticalStackView.addArrangedSubview(BoundingBoxButton)
-        ToolVerticalStackView.addArrangedSubview(PointButton)
-        ToolVerticalStackView.addArrangedSubview(UnSelectedColorButton)
-        ToolVerticalStackView.addArrangedSubview(SelectedColorButton)
-        ToolVerticalStackView.addArrangedSubview(DeleteButton)
-        return ToolVerticalStackView
-    }
     
     var ToolBoxStackView: UIStackView?
-    //return createToolBox()
 
-    var ToolBoxVerticalStackView: UIStackView?
-    //return createVerticalToolBox()
-    
-    //var ToolBoxView = ToolBoxFunction()
-    //unowned var ToolBoxView = ToolBoxFunction()
-    /*
-    lazy var ImageViewVar: ImageViewVariables = { [weak self] in
-        return ImageViewVariables()
-    }()
-    
-    lazy var ToolBoxView: ToolBoxFunction = { [weak self] in
-        return ToolBoxFunction()
-    }()
-    */
     var ImageViewVar = ImageViewVariables()
     var ToolBoxView = ToolBoxFunction()
 
@@ -275,9 +213,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
     var SelectedColorButton: UIButton { return ToolBoxView.SelectedColorButton }
     var DeleteButton: UIButton { return ToolBoxView.DeleteButton }
     var ToolStackView: UIStackView { return ToolBoxView.ToolStackView }
-    var ToolVerticalStackView: UIStackView { return ToolBoxView.ToolVerticalStackView }
 
-    //var ImageViewVar = ImageViewVariables()
     var scrollView: UIScrollView { return ImageViewVar.scrollView }
     var ButtonInfo: UIButton { return ImageViewVar.ButtonInfo }
     var TotalStackViewBackground: UIView { return ImageViewVar.TotalStackViewBackground }
@@ -291,76 +227,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
     var purpleButton: UIButton { return ImageViewVar.purpleButton }
     var yellowButton: UIButton { return ImageViewVar.yellowButton }
     var largeImage: UIImageView { return ImageViewVar.largeImage }
-    /*
-    unowned var BoundingBoxButton = UIButton()
-    unowned var PointButton = UIButton()
-    unowned var UnSelectedColorButton = UIButton()
-    unowned var SelectedColorButton = UIButton()
-    unowned var DeleteButton = UIButton()
-    unowned var ToolStackView = UIStackView()
-    unowned var ToolVerticalStackView = UIStackView()
-    
-    unowned var scrollView = UIScrollView()
-    unowned var ButtonInfo = UIButton()
-    unowned var TotalStackViewBackground = UIView()
-    unowned var ConnectorView = UIView()
-    unowned var ColorPickerStackView = UIStackView()
-    unowned var blackButton = UIButton()
-    unowned var redButton = UIButton()
-    unowned var greenButton = UIButton()
-    unowned var blueButton = UIButton()
-    unowned var orangeButton = UIButton()
-    unowned var purpleButton = UIButton()
-    unowned var yellowButton = UIButton()
-    unowned var largeImage = UIImageView()
-    */
-
-    /*
-    func assignButton() {
-        ToolBoxView = ToolBoxFunction()
-        //ToolBoxView! = ToolBoxFunction()
-        ImageViewVar = ImageViewVariables()
-        BoundingBoxButton = ToolBoxView.BoundingBoxButton
-        PointButton = ToolBoxView.PointButton
-        UnSelectedColorButton = ToolBoxView.UnSelectedColorButton
-        SelectedColorButton = ToolBoxView.SelectedColorButton
-        DeleteButton = ToolBoxView.DeleteButton
-        ToolStackView = ToolBoxView.ToolStackView
-        ToolVerticalStackView = ToolBoxView.ToolVerticalStackView
-        scrollView = ImageViewVar.scrollView
-        ButtonInfo = ImageViewVar.ButtonInfo
-        TotalStackViewBackground = ImageViewVar.TotalStackViewBackground
-        ConnectorView = ImageViewVar.ConnectorView
-        ColorPickerStackView = ImageViewVar.ColorPickerStackView
-        blackButton = ImageViewVar.blackButton
-        redButton = ImageViewVar.redButton
-        greenButton = ImageViewVar.greenButton
-        blueButton = ImageViewVar.blueButton
-        orangeButton = ImageViewVar.orangeButton
-        purpleButton = ImageViewVar.purpleButton
-        yellowButton = ImageViewVar.yellowButton
-        largeImage = ImageViewVar.largeImage
-    }
-    */
-    /*
-    func removeUI() {
-        largeImage.removeFromSuperview()
-        yellowButton.removeFromSuperview()
-        purpleButton.removeFromSuperview()
-        orangeButton.removeFromSuperview()
-        blueButton.removeFromSuperview()
-        greenButton.removeFromSuperview()
-        redButton.removeFromSuperview()
-        blackButton.removeFromSuperview()
-        TotalStackViewBackground.removeFromSuperview()
-        ColorPickerStackView.removeFromSuperview()
-        ConnectorView.removeFromSuperview()
-        ToolBoxStackView!.removeFromSuperview()
-        scrollView.removeFromSuperview()
-        ButtonInfo.removeFromSuperview()
-    }
-    */
-    
 
     func setupUI() {
         ToolBoxStackView = createToolBox()
@@ -379,6 +245,44 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
         ColorPickerStackView.addArrangedSubview(yellowButton)
         view.addSubview(ColorPickerStackView)
         scrollView.addSubview(largeImage)
+        switch (CurrentLabelType) {
+        case .boundingBox:
+            BoundingBoxButtonPress()
+        default:
+            PointButtonPress()
+        }
+        switch (UnSelectedColor) {
+        case .black:
+            UnSelectedColorButton.tintColor = .black
+        case .red:
+            UnSelectedColorButton.tintColor = .red
+        case .green:
+            UnSelectedColorButton.tintColor = .green
+        case .blue:
+            UnSelectedColorButton.tintColor = .blue
+        case .orange:
+            UnSelectedColorButton.tintColor = .orange
+        case .purple:
+            UnSelectedColorButton.tintColor = .purple
+        default:
+            UnSelectedColorButton.tintColor = .yellow
+        }
+        switch (SelectedColor) {
+        case .black:
+            SelectedColorButton.tintColor = .black
+        case .red:
+            SelectedColorButton.tintColor = .red
+        case .green:
+            SelectedColorButton.tintColor = .green
+        case .blue:
+            SelectedColorButton.tintColor = .blue
+        case .orange:
+            SelectedColorButton.tintColor = .orange
+        case .purple:
+            SelectedColorButton.tintColor = .purple
+        default:
+            SelectedColorButton.tintColor = .yellow
+        }
     }
     
     var compactConstraints: [NSLayoutConstraint] = []
@@ -496,19 +400,20 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
         // Updates Point label dimension so all future point labels can be same size
         // of currently display point labels
         dimension = newDimension
-        print(dimension)
     }
 
     
        
     @objc func InstructionsPress() {
         // Displays Instructions
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         if largeImage.image != nil {
             self.definesPresentationContext = true
-            let vc = PopUpViewController()
-            vc.modalPresentationStyle = .overCurrentContext
-            vc.modalTransitionStyle = .crossDissolve
-            present(vc, animated: true, completion: nil)
+            let popup_vc = PopUpViewController()
+            popup_vc.delegate = self
+            popup_vc.modalPresentationStyle = .overCurrentContext
+            popup_vc.modalTransitionStyle = .crossDissolve
+            present(popup_vc, animated: true, completion: nil)
         } else {
             return
         }
@@ -704,13 +609,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
         }
     }
     
-    
-    /*
-    @objc func Logout() {
-        dismiss(animated: true, completion: nil)
-    }
-    */
-    
     @objc func ButtonPress() {
         // Calls postLabel() when saved button pressed
         print("BUTTON HAS BEEN Pressed")
@@ -778,7 +676,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
             let y = Double(touchLocation.y) + offsetY - Double(scrollView.frame.origin.y)
             // Check if Color Chooser button selected
             if ColorPickerStackView.isHidden == false {
-                print(TotalStackViewBackground.frame.origin.y)
                 let minX = (ColorPickerStackView.frame.origin.x) + (TotalStackViewBackground.frame.origin.x)
                 let maxX = minX + ColorPickerStackView.frame.size.width - TotalStackViewBackground.frame.origin.x
                 let minY = (ColorPickerStackView.frame.origin.y) + (TotalStackViewBackground.frame.origin.y)
@@ -829,7 +726,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
                 } else if intersectionResult == .label {
                     RectangleIndexForChangingLabel = i
                     DisplayTextField(labelObject.getClassification())
-                    print("FINISHED")
                     return
                 }
             }
@@ -887,7 +783,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
             Selector.removeFromSuperview()
             Selector.frame.size.width = 0
             Selector.frame.size.height = 0
-            print(HighlightedSelected)
             if HighlightedSelected != -1 {
                 selectedItem = HighlightedSelected
             }
@@ -956,23 +851,4 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
            
     }
 }
-
-/*
-extension UIApplication {
-    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        if let navigationController = controller as? UINavigationController {
-            return topViewController(controller: navigationController.visibleViewController)
-        }
-        if let tabController = controller as? UITabBarController {
-            if let selected = tabController.selectedViewController {
-                return topViewController(controller: selected)
-            }
-        }
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
-        }
-        return controller
-    }
-}
-*/
 
