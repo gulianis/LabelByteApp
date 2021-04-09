@@ -2,7 +2,7 @@
 //  RegisterView.swift
 //  LabelByte
 //
-//  Created by Sandeep Guliani on 1/24/21.
+//  Created by Sachin Guliani on 1/24/21.
 //
 
 import Foundation

@@ -2,7 +2,7 @@
 //  UploadViewController.swift
 //  LabelByte
 //
-//  Created by Sandeep Guliani on 1/6/21.
+//  Created by Sachin Guliani on 1/6/21.
 //
 
 import UIKit
