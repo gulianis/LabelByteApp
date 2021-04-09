@@ -664,6 +664,18 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
         ButtonInfo.backgroundColor = .systemBlue
         // Blocks excessive saves
         var message = "Blocked 300 Seconds"
+        message = postLabel()
+        // Once Saved sets Image as complete in DataTableVC
+        if imageData!.saved == false {
+            imageData!.saved = true
+            imageData!.ofZipFile!.unsaved_data_count -= 1
+            if imageData!.ofZipFile!.unsaved_data_count == 0 {
+                imageData!.ofZipFile!.completed = true
+            }
+            save()
+        }
+        displaySuccess(message)
+        /*
         if SaveOperation.incrementToLimit() == true {
             message = postLabel()
             // Once Saved sets Image as complete in DataTableVC
@@ -679,6 +691,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, isAbleToRecei
         } else {
             self.navigationController?.popViewController(animated: true)
         }
+        */
     }
     
     @objc func DuringButtonPress() {

@@ -31,6 +31,22 @@ class FileTableViewController: UITableViewController, NSFetchedResultsController
             fatalError("Failed to fetch entities: \(error)")
         }
     }
+    
+    func downloadLabelFile() -> String {
+        var DictString = ""
+        let semaphore = DispatchSemaphore(value: 0)
+        ReceiveLabelFile() { output in
+            DictString = output
+            semaphore.signal()
+        }
+        semaphore.wait()
+        let jsonData = DictString.data(using: .utf8)!
+        let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData)
+        if let dictionary = jsonDictionary as? [String: String] {
+            return dictionary["result"]!
+        }
+        return ""
+    }
  
     
     func recieveZipNameDict() -> [String: String] {
@@ -141,14 +157,49 @@ class FileTableViewController: UITableViewController, NSFetchedResultsController
         */
     }
     
+    func showSimpleActionSheet() {
+        
+        let alert = UIAlertController(title: "Options", message: "Please Select an Option", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Refresh", style: .default, handler: {
+            (_) in
+                self.Refresh(false)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "FAQ", style: .default, handler: {
+            (_) in
+                if let url = URL(string: "https://labelbyte.com/faq/") { UIApplication.shared.open(url)}
+        }))
+
+        alert.addAction(UIAlertAction(title: "Download Label Data", style: .default, handler: { (_) in
+                let data = self.downloadLabelFile()
+                let activityViewController = UIActivityViewController(activityItems: [data],
+                                             applicationActivities: nil)
+                self.present(activityViewController, animated: true)}))
+        
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: {
+                (_) in
+                print("User click Dismiss button")
+        }))
+
+        alert.addAction(UIAlertAction(title: "Logout", style: .destructive, handler: { (_) in
+                print("User clicked Logout button")
+                self.navigationController?.popViewController(animated: true)
+        }))
+
+        self.present(alert, animated: true, completion: {
+            print("completion block")
+        })
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationItem.hidesBackButton = true
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(Logout))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Refresh", style: .plain, target: self, action: #selector(Refresh))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(Options))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Upload", style: .plain, target: self, action: #selector(Upload))
         self.navigationItem.title = "Uploaded Zip Files"
         tableView.tableFooterView = UIView()
         
@@ -227,9 +278,10 @@ class FileTableViewController: UITableViewController, NSFetchedResultsController
     }
     
     
-    @objc func Refresh() {
+    func Refresh(_ ignore: Bool) {
         // Clear data and get latest server data
-        if RefreshOperation.incrementToLimit() == false {
+        /*
+        if RefreshOperation.incrementToLimit() == false && ignore == false {
             // Defense Mechanism to excessive server requests
             // returns before calls to server and gives blocked message
             self.definesPresentationContext = true
@@ -240,13 +292,26 @@ class FileTableViewController: UITableViewController, NSFetchedResultsController
             present(vc, animated: true, completion: nil)
             return
         }
+        */
         recieveFormatZipNames()
         fetchCall()
+        print("Refresh Occured")
     }
     
-    @objc func Logout() {
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.navigationController?.popViewController(animated: true)
+    @objc func Upload() {
+        self.definesPresentationContext = true
+        let vc = UploadViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.modalTransitionStyle = .crossDissolve
+        vc.delegate = self
+        present(vc, animated: true, completion: nil)
+        return
+    }
+    
+    @objc func Options() {
+        //self.navigationController?.setNavigationBarHidden(true, animated: false)
+        //self.navigationController?.popViewController(animated: true)
+        showSimpleActionSheet()
     }
 
 }

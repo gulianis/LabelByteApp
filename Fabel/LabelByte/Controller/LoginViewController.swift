@@ -12,9 +12,10 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.LoginButton.addTarget(self, action: #selector(ButtonPress), for: .touchUpInside)
-        self.LoginButton.addTarget(self, action: #selector(DuringButtonPress), for: .touchDown)
+        self.LoginButton.addTarget(self, action: #selector(LoginButtonPress), for: .touchUpInside)
+        self.LoginButton.addTarget(self, action: #selector(DuringLoginButtonPress), for: .touchDown)
+        self.RegisterButton.addTarget(self, action: #selector(RegisterButtonPress), for: .touchUpInside)
+        self.RegisterButton.addTarget(self, action: #selector(DuringRegisterButtonPress), for: .touchDown)
         // Detect Keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -23,6 +24,7 @@ class LoginViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         // Make sure screen goes to normal before appearing
         // if keyboard still occuring in login screen
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
         }
@@ -31,7 +33,7 @@ class LoginViewController: UIViewController {
         if largest < 600 {
             TotalStackView.spacing = 35
             LoginLabelInfo.font = UIFont.systemFont(ofSize: 15.0)
-            LinkLabelInfo.font = UIFont.systemFont(ofSize: 13.0)
+            //LinkLabelInfo.font = UIFont.systemFont(ofSize: 13.0)
             TitleLabelInfo.font = UIFont(name: "Gill Sans", size: 50)
         }
         /*
@@ -73,7 +75,7 @@ class LoginViewController: UIViewController {
     unowned var LoginButton: UIButton { return MainView.LoginButtonInfo }
     unowned var TotalStackView: UIStackView { return MainView.TotalStackView }
     unowned var LoginLabelInfo: UILabel { return MainView.LoginLabelInfo }
-    unowned var LinkLabelInfo: UILabel { return MainView.LinkLabelInfo }
+    unowned var RegisterButton: UIButton { return MainView.RegisterButtonInfo }
     unowned var TitleLabelInfo: UILabel { return MainView.TitleLabelInfo }
 
     func GetToken(_ username: String, _ password: String) -> String {
@@ -103,8 +105,14 @@ class LoginViewController: UIViewController {
         Username.resignFirstResponder()
         Password.resignFirstResponder()
     }
+    
+    @objc func RegisterButtonPress() {
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationController?.pushViewController(RegisterViewController(), animated: true)
+        RegisterButton.backgroundColor = .systemBlue
+    }
             
-    @objc func ButtonPress() {
+    @objc func LoginButtonPress() {
         Username.resignFirstResponder()
         Password.resignFirstResponder()
         let token = GetToken(Username.text!, Password.text!)
@@ -142,8 +150,12 @@ class LoginViewController: UIViewController {
         LoginButton.backgroundColor = .systemBlue
     }
         
-    @objc func DuringButtonPress() {
+    @objc func DuringLoginButtonPress() {
         LoginButton.backgroundColor = .gray
+    }
+    
+    @objc func DuringRegisterButtonPress() {
+        RegisterButton.backgroundColor = .gray
     }
         
     @objc func keyboardWillShow(notification: NSNotification) {

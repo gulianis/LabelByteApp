@@ -30,6 +30,10 @@
 		89A8B9C02439DDFC00F63177 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A8B9BF2439DDFC00F63177 /* Model.swift */; };
 		89A9CE06252C382400E6ACA0 /* LabelByteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A9CE05252C382400E6ACA0 /* LabelByteTests.swift */; };
 		89A9CE3A252D36BD00E6ACA0 /* LabelByteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A9CE39252D36BD00E6ACA0 /* LabelByteUITests.swift */; };
+		89B9DA6925A6AC8C00A6F93E /* UploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B9DA6825A6AC8C00A6F93E /* UploadViewController.swift */; };
+		89B9DA6E25A6ACAF00A6F93E /* UploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B9DA6D25A6ACAF00A6F93E /* UploadView.swift */; };
+		89B9DA7325AD759500A6F93E /* DocumentPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B9DA7225AD759500A6F93E /* DocumentPickerViewController.swift */; };
+		89B9DA7825AD75EA00A6F93E /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B9DA7725AD75EA00A6F93E /* DocumentPicker.swift */; };
 		89C8404925227DB30015C401 /* Data+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C8404325227DB30015C401 /* Data+CoreDataClass.swift */; };
 		89C8404A25227DB30015C401 /* Data+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C8404425227DB30015C401 /* Data+CoreDataProperties.swift */; };
 		89C8404B25227DB30015C401 /* ZipFile+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C8404525227DB30015C401 /* ZipFile+CoreDataClass.swift */; };
@@ -37,6 +41,8 @@
 		89C8404D25227DB30015C401 /* Account+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C8404725227DB30015C401 /* Account+CoreDataClass.swift */; };
 		89C8404E25227DB30015C401 /* Account+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C8404825227DB30015C401 /* Account+CoreDataProperties.swift */; };
 		89CD75FA24DA478B0003CE4E /* DataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CD75F924DA478B0003CE4E /* DataTableViewController.swift */; };
+		89CED24725BE813100940767 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CED24625BE813100940767 /* RegisterViewController.swift */; };
+		89CED24C25BE820200940767 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CED24B25BE820200940767 /* RegisterView.swift */; };
 		89D1FF73249DE4E8009C2F8B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D1FF72249DE4E8009C2F8B /* LoginViewController.swift */; };
 		89D1FF75249DE6A6009C2F8B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D1FF74249DE6A6009C2F8B /* LoginView.swift */; };
 /* End PBXBuildFile section */
@@ -88,6 +94,10 @@
 		89A9CE37252D36BD00E6ACA0 /* LabelByteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LabelByteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		89A9CE39252D36BD00E6ACA0 /* LabelByteUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelByteUITests.swift; sourceTree = "<group>"; };
 		89A9CE3B252D36BD00E6ACA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89B9DA6825A6AC8C00A6F93E /* UploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewController.swift; sourceTree = "<group>"; };
+		89B9DA6D25A6ACAF00A6F93E /* UploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadView.swift; sourceTree = "<group>"; };
+		89B9DA7225AD759500A6F93E /* DocumentPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerViewController.swift; sourceTree = "<group>"; };
+		89B9DA7725AD75EA00A6F93E /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
 		89C8404325227DB30015C401 /* Data+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+CoreDataClass.swift"; sourceTree = "<group>"; };
 		89C8404425227DB30015C401 /* Data+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		89C8404525227DB30015C401 /* ZipFile+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZipFile+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -95,6 +105,8 @@
 		89C8404725227DB30015C401 /* Account+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Account+CoreDataClass.swift"; sourceTree = "<group>"; };
 		89C8404825227DB30015C401 /* Account+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Account+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		89CD75F924DA478B0003CE4E /* DataTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTableViewController.swift; sourceTree = "<group>"; };
+		89CED24625BE813100940767 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		89CED24B25BE820200940767 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		89D1FF72249DE4E8009C2F8B /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		89D1FF74249DE6A6009C2F8B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -187,6 +199,10 @@
 				899A92D724FF67A90048E07E /* SuccessViewController.swift */,
 				89A4611A254A81FE00EE80E8 /* TextFieldPopUpViewController.swift */,
 				89A46124254B545100EE80E8 /* protocols-enums.swift */,
+				89B9DA6825A6AC8C00A6F93E /* UploadViewController.swift */,
+				89B9DA7225AD759500A6F93E /* DocumentPickerViewController.swift */,
+				89B9DA7725AD75EA00A6F93E /* DocumentPicker.swift */,
+				89CED24625BE813100940767 /* RegisterViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -210,6 +226,8 @@
 				8938EA1C24EA2A9E00209FB8 /* ViewFunctions.swift */,
 				8985645624F007F400225614 /* ToolBoxView.swift */,
 				899A92D924FF68000048E07E /* SuccessView.swift */,
+				89B9DA6D25A6ACAF00A6F93E /* UploadView.swift */,
+				89CED24B25BE820200940767 /* RegisterView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -363,14 +381,18 @@
 			files = (
 				89C8404D25227DB30015C401 /* Account+CoreDataClass.swift in Sources */,
 				89645B1024E3DD56002743D2 /* FileTableViewController.swift in Sources */,
+				89B9DA7325AD759500A6F93E /* DocumentPickerViewController.swift in Sources */,
 				8994499024AB496C003D5120 /* PopUpView.swift in Sources */,
 				89D1FF73249DE4E8009C2F8B /* LoginViewController.swift in Sources */,
 				89A32D5D2430320400892752 /* AppDelegate.swift in Sources */,
 				89A4611B254A81FE00EE80E8 /* TextFieldPopUpViewController.swift in Sources */,
 				8985645724F007F400225614 /* ToolBoxView.swift in Sources */,
+				89B9DA6925A6AC8C00A6F93E /* UploadViewController.swift in Sources */,
 				894390A6243188060050EA73 /* View.swift in Sources */,
 				89A8B9C02439DDFC00F63177 /* Model.swift in Sources */,
 				89C8404C25227DB30015C401 /* ZipFile+CoreDataProperties.swift in Sources */,
+				89CED24725BE813100940767 /* RegisterViewController.swift in Sources */,
+				89B9DA7825AD75EA00A6F93E /* DocumentPicker.swift in Sources */,
 				89C8404A25227DB30015C401 /* Data+CoreDataProperties.swift in Sources */,
 				8994498E24AB4750003D5120 /* PopUpViewController.swift in Sources */,
 				89CD75FA24DA478B0003CE4E /* DataTableViewController.swift in Sources */,
@@ -381,6 +403,8 @@
 				8915C76424E0F4B500D3AB26 /* TextFieldPopUpView.swift in Sources */,
 				89203B8F251BD0BD00AD46FD /* LabelByte.xcdatamodeld in Sources */,
 				899A92DA24FF68000048E07E /* SuccessView.swift in Sources */,
+				89B9DA6E25A6ACAF00A6F93E /* UploadView.swift in Sources */,
+				89CED24C25BE820200940767 /* RegisterView.swift in Sources */,
 				89C8404E25227DB30015C401 /* Account+CoreDataProperties.swift in Sources */,
 				894390A424317EF90050EA73 /* Network.swift in Sources */,
 				89C8404B25227DB30015C401 /* ZipFile+CoreDataClass.swift in Sources */,

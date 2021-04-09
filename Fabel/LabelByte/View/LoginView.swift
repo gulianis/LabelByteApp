@@ -100,12 +100,16 @@ class LoginView: UIView {
         return Button
     }()
     
-    let LinkLabelInfo: UILabel = {
-        let Label = UILabel()
-        Label.text = "Create account at labelbyte.com"
-        Label.font = Label.font.withSize(20)
-        Label.translatesAutoresizingMaskIntoConstraints = false
-        return Label
+    let RegisterButtonInfo: UIButton = {
+        let Button = UIButton()
+        Button.setTitle("Create Account", for: .normal)
+        //Button.setTitleColor(.black, for: .normal)
+        Button.backgroundColor = .systemBlue
+        Button.layer.cornerRadius = 5
+        Button.layer.borderColor = UIColor.black.cgColor
+        Button.layer.borderWidth = 3
+        Button.translatesAutoresizingMaskIntoConstraints = false
+        return Button
     }()
     
     
@@ -116,7 +120,7 @@ class LoginView: UIView {
         LoginStackView.addArrangedSubview(LoginLabelInfo)
         LoginStackView.addArrangedSubview(TextFieldStackView)
         LoginStackView.addArrangedSubview(LoginButtonInfo)
-        LoginStackView.addArrangedSubview(LinkLabelInfo)
+        LoginStackView.addArrangedSubview(RegisterButtonInfo)
         TotalStackView.addArrangedSubview(TitleLabelInfo)
         TotalStackView.addArrangedSubview(LoginStackView)
         self.addSubview(TotalStackView)
@@ -125,15 +129,23 @@ class LoginView: UIView {
         
     private func setupLayout() {
         EmailInfo.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
+        EmailInfo.heightAnchor.constraint(equalToConstant: 30).isActive = true
         PasswordInfo.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
         PasswordInfo.heightAnchor.constraint(equalToConstant: 30).isActive = true
             
 
         LoginButtonInfo.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 25).isActive = true
 
-        LoginButtonInfo.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        LoginButtonInfo.heightAnchor.constraint(equalToConstant: 30).isActive = true
             
         TotalStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         TotalStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        
+        //LinkLabelInfo.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        //LinkLabelInfo.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        
+        RegisterButtonInfo.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 25).isActive = true
+
+        RegisterButtonInfo.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
 }

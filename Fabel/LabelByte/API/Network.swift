@@ -8,14 +8,15 @@
 import UIKit
 import Foundation
 
-let ip = "labelbyte.com"
+let ip = "https://labelbyte.com"
 
 // All functions in this file are POST or GET Requests based on variables
 // asked for in the function
 
 func ReceiveToken(_ username: String, _ password: String, completionBlock: @escaping (String) -> Void) {
     // Prepare URL
-    let url = URL(string: "https://www." + ip + "/api/token-auth/")
+    //let url = URL(string: "https://www." + ip + "/api/token-auth/")
+    let url = URL(string: ip + "/api/token-auth/")
     guard let requestUrl = url else { fatalError() }
     
     let urlconfig = URLSessionConfiguration.default
@@ -54,7 +55,8 @@ func ReceiveToken(_ username: String, _ password: String, completionBlock: @esca
 
 func ReceiveImage(_ zipFileName: String, _ imageName: String, completionBlock: ((UIImage?) -> Void)? = nil) {
     // Prepare URL
-    let url = URL(string: "https://www." + ip + "/api/download/")
+    //let url = URL(string: "https://www." + ip + "/api/download/")
+    let url = URL(string: ip + "/api/download/")
     guard let requestUrl = url else { fatalError() }
     
     let urlconfig = URLSessionConfiguration.default
@@ -110,7 +112,8 @@ func ReceiveImage(_ zipFileName: String, _ imageName: String, completionBlock: (
 
 func ImageRequestCount(_ zipFileName: String, _ imageName: String, completionBlock: @escaping (String) -> Void) {
     // Prepare URL
-    let url = URL(string: "https://www." + ip + "/api/download-count/")
+    //let url = URL(string: "https://www." + ip + "/api/download-count/")
+    let url = URL(string: ip + "/api/download-count/")
     guard let requestUrl = url else { fatalError() }
     
     let urlconfig = URLSessionConfiguration.default
@@ -158,7 +161,8 @@ func ImageRequestCount(_ zipFileName: String, _ imageName: String, completionBlo
 
 func SendCoordinates(_ coordinateData: [String: String], completionBlock: @escaping (String) -> Void) {
     // Prepare URL
-    let url = URL(string: "https://www." + ip + "/api/save_labels/")
+    //let url = URL(string: "https://www." + ip + "/api/save_labels/")
+    let url = URL(string: ip + "/api/save_labels/")
     guard let requestUrl = url else { fatalError() }
     
     let urlconfig = URLSessionConfiguration.default
@@ -220,7 +224,8 @@ func SendCoordinates(_ coordinateData: [String: String], completionBlock: @escap
 
 func GETCoordinates(_ zipFileName: String, _ imageName: String, completionBlock: @escaping (String) -> Void) {
     // Prepare URL
-    let url = URL(string: "https://www." + ip + "/api/getLabel/")
+    //let url = URL(string: "https://www." + ip + "/api/getLabel/")
+    let url = URL(string: ip + "/api/getLabel/")
     guard let requestUrl = url else { fatalError() }
     
     let urlconfig = URLSessionConfiguration.default
@@ -268,7 +273,8 @@ func GETCoordinates(_ zipFileName: String, _ imageName: String, completionBlock:
 
 func GETZipNames(completionBlock: @escaping (String) -> Void) {
     // Prepare URL
-    let url = URL(string: "https://www." + ip + "/api/zipFileName/")
+    //let url = URL(string: "https://www." + ip + "/api/zipFileName/")
+    let url = URL(string: ip + "/api/zipFileName/")
     guard let requestUrl = url else { fatalError() }
     
     let urlconfig = URLSessionConfiguration.default
@@ -305,7 +311,8 @@ func GETZipNames(completionBlock: @escaping (String) -> Void) {
 
 func RecieveImageNames(_ postString: String, completionBlock: @escaping (String) -> Void) {
     // Prepare URL
-    let url = URL(string: "https://www." + ip + "/api/imageName/")
+    //let url = URL(string: "https://www." + ip + "/api/imageName/")
+    let url = URL(string: ip + "/api/imageName/")
     guard let requestUrl = url else { fatalError() }
     
     let urlconfig = URLSessionConfiguration.default
@@ -351,3 +358,132 @@ func RecieveImageNames(_ postString: String, completionBlock: @escaping (String)
     task.resume()
 }
 
+func UploadZipFile(_ filePath: URL, completionBlock: @escaping (String) -> Void) {
+    //let url = URL(string: "https://www" + ip + "/api/uploadZip/")
+    let url = URL(string: ip + "/api/uploadZip/")
+    guard let requestUrl = url else { fatalError() }
+    
+    let urlconfig = URLSessionConfiguration.default
+    urlconfig.timeoutIntervalForRequest = 30.0
+    urlconfig.timeoutIntervalForResource = 60.0
+    let session = URLSession(configuration: urlconfig)
+    
+    // Prepare URL Request Object
+    var request = URLRequest(url: requestUrl)
+    request.httpMethod = "POST"
+    //request.setValue(filePath.lastPathComponent, forHTTPHeaderField: "filename")
+    let value = "attachment; filename=\"\(filePath.lastPathComponent)\""
+    request.setValue(value, forHTTPHeaderField: "Content-Disposition")
+    request.setValue("application/zip", forHTTPHeaderField: "Content-Type")
+    //request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
+    let RecievedDataAfterSave = KeyChain.load(key: currentUsername)
+    let accessToken = "Token " + KeyChain.convertNSDataToStr(data: RecievedDataAfterSave!)
+    request.setValue(accessToken, forHTTPHeaderField: "Authorization")
+    
+    // Set HTTP Request Body
+    //request.httpBody = postString.data(using: String.Encoding.utf8)
+    //request.setValue("application/zip", forHTTPHeaderField: "Content-Type")
+    let task = session.uploadTask(with: request, fromFile: filePath) { (data, response, error) in
+        // Check for Error
+        if let error = error {
+            print("Error took place \(error)")
+            completionBlock("Error")
+        }
+        
+        // Convert HTTP Response Data to a String
+        if let data = data, let dataString = String(data: data, encoding: .utf8) {
+            completionBlock(dataString)
+        }
+        // Gets 206 in response
+    }
+    //task.resume()
+    task.resume()
+}
+
+func Register(_ email: String, _ password: String, _ retypePassword: String, completionBlock: @escaping (String) -> Void) {
+    // Prepare URL
+    //let url = URL(string: "https://www." + ip + "/api/getLabel/")
+    let url = URL(string: ip + "/api/registerThroughAPI/")
+    guard let requestUrl = url else { fatalError() }
+    
+    let urlconfig = URLSessionConfiguration.default
+    urlconfig.timeoutIntervalForRequest = 30.0
+    urlconfig.timeoutIntervalForResource = 60.0
+    let session = URLSession(configuration: urlconfig)
+    
+    // Prepare URL Request Object
+    var request = URLRequest(url: requestUrl)
+    request.httpMethod = "POST"
+    
+
+    //request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    /*
+    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+    let jsonData: Foundation.Data
+    do {
+        jsonData = try JSONSerialization.data(withJSONObject: ["email": email, "password1": password, "password2": retypePassword], options: [])
+        request.httpBody = jsonData
+    } catch {
+        print("Error: cannot create JSON from todo")
+        return
+    }
+    */
+    let dataString = "email=\(email)&password1=\(password)&password2=\(retypePassword)"
+    request.httpBody = dataString.data(using: .utf8)
+
+    
+    // Preform HTTP Request
+    let task = session.dataTask(with: request) { (data, response, error) in
+        
+        // Check for Error
+        if let error = error {
+            print("Error took place \(error)")
+            completionBlock("Error")
+        }
+        
+        // Convert HTTP Response Data to a String
+        if let data = data, let dataString = String(data: data, encoding: .utf8) {
+            completionBlock(dataString)
+        }
+    }
+    task.resume()
+}
+
+func ReceiveLabelFile(completionBlock: @escaping (String) -> Void) {
+    // Prepare URL
+    //let url = URL(string: "https://www." + ip + "/api/zipFileName/")
+    let url = URL(string: ip + "/api/downloadLabelThroughAPI/")
+    guard let requestUrl = url else { fatalError() }
+    
+    let urlconfig = URLSessionConfiguration.default
+    urlconfig.timeoutIntervalForRequest = 30.0
+    urlconfig.timeoutIntervalForResource = 60.0
+    let session = URLSession(configuration: urlconfig)
+    
+    // Prepare URL Request Object
+    var request = URLRequest(url: requestUrl)
+    request.httpMethod = "POST"
+    
+    //var accessToken = "Token cfcbdf09cf877c75fda92524e8c12e667ca90f8f"
+    let RecievedDataAfterSave = KeyChain.load(key: currentUsername)
+    let accessToken = "Token " + KeyChain.convertNSDataToStr(data: RecievedDataAfterSave!)
+    
+    request.setValue(accessToken, forHTTPHeaderField: "Authorization")
+    
+    // Preform HTTP Request
+    let task = session.dataTask(with: request) { (data, response, error) in
+        
+        // Check for Error
+        if let error = error {
+            print("Error took place \(error)")
+            completionBlock("Error")
+        }
+        
+        // Convert HTTP Response Data to a String
+        if let data = data, let dataString = String(data: data, encoding: .utf8) {
+            completionBlock(dataString)
+        }
+    }
+    task.resume()
+    
+}
