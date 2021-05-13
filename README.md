@@ -1,2 +1,2 @@
-# FabelApp
-ios App for Fabel
+# LabelByteApp
+ios App for LabelByte
